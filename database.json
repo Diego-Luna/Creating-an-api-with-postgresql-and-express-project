@@ -1,0 +1,16 @@
+{
+  "dev": {
+    "driver": "pg",
+    "host": "127.0.0.1",
+    "database": "products_ecommerce",
+    "user": "full_stack_user",
+    "password": "password123"
+  },
+  "test": {
+    "driver": "pg",
+    "host": "127.0.0.1",
+    "database": "products_ecommerce_test",
+    "user": "full_stack_user",
+    "password": "password123"
+  }
+}
