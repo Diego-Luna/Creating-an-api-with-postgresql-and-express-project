@@ -14,12 +14,7 @@ const show = async (req: Request, res: Response) => {
 }
 
 const create = async (req: Request, res: Response) => {
-  console.log('Vamos a crearlo -> params :');
-  console.log(req.params.name);
-  console.log(req.params.price);
-  console.log('Vamos a crearlo -> body :');
-  console.log(req.body.name);
-  console.log(req.body.price);
+
   try {
     const product: Product = {
       name: req.body.name,
