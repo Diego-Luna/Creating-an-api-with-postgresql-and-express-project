@@ -1,5 +1,6 @@
 import express, { Request, Response } from 'express'
-import productRoutes from './handler/productsRoutes'
+import productsRoutes from './handler/productsRoutes'
+import usersRoutes from './handler/usersRoutes'
 import bodyParser from 'body-parser'
 
 const port: number = 4000
@@ -13,7 +14,8 @@ app.get('/', function (req: Request, res: Response) {
     res.send('Hello World!')
 })
 
-productRoutes(app);
+productsRoutes(app);
+usersRoutes(app);
 
 app.listen(port, function () {
     console.log(`starting app on: http://localhost/${port}`)
