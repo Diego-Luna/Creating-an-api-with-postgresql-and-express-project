@@ -61,15 +61,6 @@ export class UserStore {
 
   async create(u: User): Promise<User> {
     try {
-
-      console.log('---> u: ');
-      console.log(u);
-      console.log(u.firstName);
-      console.log(u.lastName);
-      console.log(u.password);
-
-
-
       // @ts-ignore
       const conn = await Client.connect()
       const sql = 'INSERT INTO users (firstName, lastName, password) VALUES($1, $2, $3) RETURNING *'
@@ -79,26 +70,14 @@ export class UserStore {
         parseInt(saltRounds)
       );
 
-      console.log("---> hash :");
-      console.log(hash);
-
-
       const result = await conn.query(sql, [u.firstName, u.lastName, hash])
 
-      console.log("---> result :");
-      console.log(result);
-
       const user = result.rows[0]
-
-      console.log("---> user :");
-      console.log(user);
 
       conn.release()
 
       return user
     } catch (err) {
-      console.log(" >>> err: ");
-      console.log(err);
       throw new Error(`unable create user (firstName :${u.firstName} lastName: ${u.lastName}): ${err}`)
     }
   }
@@ -121,10 +100,19 @@ export class UserStore {
   }
 
   async authenticate(username: string, password: string): Promise<User | null> {
+
+    console.log("-> username: " + username);
+    console.log("-> password: " + password);
+
     const conn = await Client.connect()
-    const sql = 'SELECT password_digest FROM users WHERE username=($1)'
+
+    console.log("-> conn ready ");
+
+    const sql = 'SELECT password FROM users WHERE firstName=($1)'
 
     const result = await conn.query(sql, [username])
+
+    console.log("-> result ready ");
 
     console.log(password + pepper)
 
@@ -132,12 +120,15 @@ export class UserStore {
 
       const user = result.rows[0]
 
+      console.log("--> user :");
+
       console.log(user)
 
       if (bcrypt.compareSync(password + pepper, user.password)) {
+        console.log("---> bcrypt.compareSync Ready ")
+
         return user
       }
-
     }
 
     return null
