@@ -1,5 +1,6 @@
 import express, { Request, Response } from 'express'
 import jwt from 'jsonwebtoken'
+import verifyAuthToken from '../middleware/verifyAuthToken'
 import { User, UserStore } from '../models/users'
 import dotenv from 'dotenv'
 
@@ -20,9 +21,9 @@ const userRoutes = (app: express.Application) => {
     app.get('/users', index)
     app.get('/users/:id', show)
     app.post('/users', create)
-    app.post('/users/:id', update)
-    app.delete('/users/:id', destroy)
     app.post('/users/authenticate', authenticate)
+    app.post('/users/:id', verifyAuthToken, update)
+    app.delete('/users/:id', verifyAuthToken, destroy)
 }
 
 const store = new UserStore()
@@ -68,7 +69,7 @@ const update = async (req: Request, res: Response) => {
         const authorizationHeader: string = req.headers.authorization ? req.headers.authorization : "";
         const token = authorizationHeader.split(' ')[1]
         const decoded = jwt.verify(token, token_secret)
-        if (decoded.id !== user.id) {
+        if ((<any>decoded).id !== user.id) {
             throw new Error('User id does not match!')
         }
     } catch (err) {
