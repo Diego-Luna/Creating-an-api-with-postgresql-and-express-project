@@ -1,7 +1,9 @@
 CREATE TABLE orders (
     id SERIAL PRIMARY  KEY,
-    id_product text,
-    quantity text,
-    -- user_id REFERENCES users(id)
-    status_order  VARCHAR(150)
+    id_product bigint REFERENCES products(id),
+    user_id bigint REFERENCES users(id),
+    quantity integer[],
+    status_order  boolean
 );
+
+
