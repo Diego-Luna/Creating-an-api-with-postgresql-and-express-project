@@ -20,6 +20,7 @@ const userRoutes = (app: express.Application) => {
     app.get('/users', index)
     app.get('/users/:id', show)
     app.post('/users', create)
+    app.post('/users/:id', update)
     app.delete('/users/:id', destroy)
     app.post('/users/authenticate', authenticate)
 }
@@ -53,6 +54,35 @@ const create = async (req: Request, res: Response) => {
     } catch (err) {
         res.status(400)
         res.json(`Route-> Error : ${err} + user: ${user}`)
+    }
+}
+
+const update = async (req: Request, res: Response) => {
+    const user: User = {
+        id: parseInt(req.params.id),
+        firstName: req.body.firstName,
+        lastName: req.body.lastName,
+        password: req.body.password
+    }
+    try {
+        const authorizationHeader: string = req.headers.authorization ? req.headers.authorization : "";
+        const token = authorizationHeader.split(' ')[1]
+        const decoded = jwt.verify(token, token_secret)
+        if (decoded.id !== user.id) {
+            throw new Error('User id does not match!')
+        }
+    } catch (err) {
+        res.status(401)
+        res.json(err)
+        return
+    }
+
+    try {
+        const updated = await store.create(user)
+        res.json(updated)
+    } catch (err) {
+        res.status(400)
+        res.json(err)
     }
 }
 
