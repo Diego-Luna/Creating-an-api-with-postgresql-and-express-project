@@ -1,7 +1,16 @@
 import express, { Request, Response } from 'express'
 import { Product, ProductsStore } from '../models/products'
+import verifyAuthToken from '../middleware/verifyAuthToken'
 
 const store = new ProductsStore()
+
+const productRoutes = (app: express.Application) => {
+  app.get('/products', index)
+  app.get('/products/:id', show)
+  app.post('/products/', verifyAuthToken, create)
+  app.delete('/products/:id', verifyAuthToken, destroy)
+}
+
 
 const index = async (_req: Request, res: Response) => {
   const products = await store.index()
@@ -39,11 +48,4 @@ const destroy = async (req: Request, res: Response) => {
   res.json(deleted)
 }
 
-const productRoutes = (app: express.Application) => {
-  app.get('/products', index)
-  app.get('/products/:id', show)
-  app.post('/products/', create)
-  app.delete('/products/:id', destroy)
-}
-
-export default productRoutes
+export default productRoutes;
