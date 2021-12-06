@@ -28,13 +28,23 @@ const userRoutes = (app: express.Application) => {
 const store = new UserStore()
 
 const index = async (_req: Request, res: Response) => {
-    const users = await store.index()
-    res.json(users)
+    try {
+        const users = await store.index()
+        res.json(users)
+    } catch (error) {
+        res.status(400)
+        res.send(`Error -> ${error}`)
+    }
 }
 
 const show = async (_req: Request, res: Response) => {
-    const user = await store.show(_req.params.id)
-    res.json(user)
+    try {
+        const user = await store.show(_req.params.id)
+        res.json(user)
+    } catch (error) {
+        res.status(400)
+        res.send(`Error -> ${error}`)
+    }
 }
 
 
@@ -51,9 +61,9 @@ const create = async (req: Request, res: Response) => {
         var token = jwt.sign({ user: newUser }, token_secret);
 
         res.json(token)
-    } catch (err) {
+    } catch (error) {
         res.status(400)
-        res.json(`Route-> Error : ${err} + user: ${user}`)
+        res.send(`Error -> ${error}`)
     }
 }
 
@@ -71,18 +81,17 @@ const update = async (req: Request, res: Response) => {
         if ((<any>decoded).id !== user.id) {
             throw new Error('User id does not match!')
         }
-    } catch (err) {
-        res.status(401)
-        res.json(err)
-        return
+    } catch (error) {
+        res.status(400)
+        res.send(`Error -> ${error}`)
     }
 
     try {
         const updated = await store.create(user)
         res.json(updated)
-    } catch (err) {
+    } catch (error) {
         res.status(400)
-        res.json(err)
+        res.send(`Error -> ${error}`)
     }
 }
 
@@ -97,8 +106,8 @@ const authenticate = async (req: Request, res: Response) => {
         var token = jwt.sign({ user: u }, token_secret);
         res.json(token)
     } catch (error) {
-        res.status(401)
-        res.json({ error })
+        res.status(400)
+        res.send(`Error -> ${error}`)
     }
 }
 

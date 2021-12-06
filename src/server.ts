@@ -12,12 +12,20 @@ const app: express.Application = express()
 app.use(bodyParser.json())
 
 app.get('/', function (req: Request, res: Response) {
-    res.send('Hello World!')
+    res.send(`
+    Creating-an-api-with-postgresql-and-express-project-starter,
+    By: Diego Francisco Luna Lopez
+    `)
 })
 
 productsRoutes(app);
 usersRoutes(app);
 orderRoutes(app);
+
+app.get('*', (req: Request, res: Response): void => {
+    res.redirect('/');
+});
+
 
 app.listen(port, function () {
     console.log(`starting app on: http://localhost/${port}`)

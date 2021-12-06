@@ -28,7 +28,8 @@ const verifyAuthToken = (req: Request, res: Response, next: Function) => {
 
     next()
   } catch (error) {
-    res.status(401)
+    res.status(400)
+    res.send(`Error -> ${error}`)
   }
 }
 

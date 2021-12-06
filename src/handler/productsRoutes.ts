@@ -13,13 +13,23 @@ const productRoutes = (app: express.Application) => {
 
 
 const index = async (_req: Request, res: Response) => {
-  const products = await store.index()
-  res.json(products)
+  try {
+    const products = await store.index()
+    res.json(products)
+  } catch (error) {
+    res.status(400)
+    res.send(`Error -> ${error}`)
+  }
 }
 
 const show = async (req: Request, res: Response) => {
-  const product = await store.show(req.params.id)
-  res.json(product)
+  try {
+    const product = await store.show(req.params.id)
+    res.json(product)
+  } catch (error) {
+    res.status(400)
+    res.send(`Error -> ${error}`)
+  }
 }
 
 const create = async (req: Request, res: Response) => {
@@ -34,18 +44,20 @@ const create = async (req: Request, res: Response) => {
     const newProduct = await store.create(product)
     console.log('--> Funciono');
     res.json(newProduct)
-  } catch (err) {
-    console.log('--> no funciono');
-    console.log(err);
-
+  } catch (error) {
     res.status(400)
-    res.json(err)
+    res.send(`Error -> ${error}`)
   }
 }
 
 const destroy = async (req: Request, res: Response) => {
-  const deleted = await store.delete(req.params.id)
-  res.json(deleted)
+  try {
+    const deleted = await store.delete(req.params.id)
+    res.json(deleted)
+  } catch (error) {
+    res.status(400)
+    res.send(`Error -> ${error}`)
+  }
 }
 
 export default productRoutes;

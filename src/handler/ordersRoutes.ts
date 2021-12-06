@@ -8,19 +8,27 @@ const orderRoutes = (app: express.Application) => {
   app.get('/orders', index)
   app.get('/orders/:id', show)
   app.post('/orders/:id', show)
-  // app.post('/orders', create)
-  // add product
   app.post('/orders/', addProduct)
 }
 
 const index = async (_req: Request, res: Response) => {
-  const products = await store.index()
-  res.json(products)
+  try {
+    const products = await store.index()
+    res.json(products)
+  } catch (error) {
+    res.status(400)
+    res.send(`Error -> ${error}`)
+  }
 }
 
 const show = async (req: Request, res: Response) => {
-  const product = await store.show(req.params.id)
-  res.json(product)
+  try {
+    const product = await store.show(req.params.id)
+    res.json(product)
+  } catch (error) {
+    res.status(400)
+    res.send(`Error -> ${error}`)
+  }
 }
 
 // ... other methods
@@ -41,11 +49,11 @@ const addProduct = async (_req: Request, res: Response) => {
 
     const addedProduct = await store.addProduct(order.id_product, order.user_id, order.quantity, order.status_order)
     res.json(addedProduct)
-  } catch (err) {
+  } catch (error) {
     console.log("**error en rutas **");
-    
+
     res.status(400)
-    res.json(err)
+    res.send(`Error -> ${error}`)
   }
 }
 
