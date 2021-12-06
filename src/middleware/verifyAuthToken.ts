@@ -23,13 +23,9 @@ const verifyAuthToken = (req: Request, res: Response, next: Function) => {
     const token = authorizationHeader.split(' ')[1]
     const decoded = jwt.verify(token, token_secret)
 
-    console.log("> Decoded");
-    console.log(decoded);
-
     next()
   } catch (error) {
-    res.status(400)
-    res.send(`Error -> ${error}`)
+    return res.status(400).send(`Error -> ${error}`)
   }
 }
 

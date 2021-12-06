@@ -20,6 +20,7 @@ if (typeof TOKEN_SECRET == 'undefined') {
 const userRoutes = (app: express.Application) => {
     app.get('/users', verifyAuthToken, index)
     app.get('/users/:id', verifyAuthToken, show)
+    // app.post('/users', verifyAuthToken, create)
     app.post('/users', create)
     app.post('/users/authenticate', authenticate)
     app.post('/users/:id', verifyAuthToken, update)
@@ -32,8 +33,8 @@ const index = async (_req: Request, res: Response) => {
         const users = await store.index()
         res.json(users)
     } catch (error) {
-        res.status(400)
-        res.send(`Error -> ${error}`)
+
+        res.status(400).send(`Error -> ${error}`)
     }
 }
 
@@ -42,8 +43,8 @@ const show = async (_req: Request, res: Response) => {
         const user = await store.show(_req.params.id)
         res.json(user)
     } catch (error) {
-        res.status(400)
-        res.send(`Error -> ${error}`)
+
+        res.status(400).send(`Error -> ${error}`)
     }
 }
 
@@ -62,8 +63,8 @@ const create = async (req: Request, res: Response) => {
 
         res.json(token)
     } catch (error) {
-        res.status(400)
-        res.send(`Error -> ${error}`)
+
+        res.status(400).send(`Error -> ${error}`)
     }
 }
 
@@ -82,16 +83,16 @@ const update = async (req: Request, res: Response) => {
             throw new Error('User id does not match!')
         }
     } catch (error) {
-        res.status(400)
-        res.send(`Error -> ${error}`)
+
+        res.status(400).send(`Error -> ${error}`)
     }
 
     try {
         const updated = await store.create(user)
         res.json(updated)
     } catch (error) {
-        res.status(400)
-        res.send(`Error -> ${error}`)
+
+        res.status(400).send(`Error -> ${error}`)
     }
 }
 
@@ -106,8 +107,8 @@ const authenticate = async (req: Request, res: Response) => {
         var token = jwt.sign({ user: u }, token_secret);
         res.json(token)
     } catch (error) {
-        res.status(400)
-        res.send(`Error -> ${error}`)
+
+        res.status(400).send(`Error -> ${error}`)
     }
 }
 

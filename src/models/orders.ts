@@ -19,9 +19,6 @@ export class OrdersStore {
 
       const result = await conn.query(sql)
 
-      console.log("__> index result: ");
-      console.log(result.rows);
-
       conn.release()
 
       return result.rows
@@ -46,48 +43,9 @@ export class OrdersStore {
     }
   }
 
-  async create(b: Order): Promise<Order> {
-    try {
-
-      const sql = 'INSERT INTO orders (id_product, user_id, quantity, status_order) VALUES($1, $2, $3, $4) RETURNING *'
-      // @ts-ignore
-      const conn = await Client.connect()
-
-      const result = await conn
-        .query(sql, [b.id_product, b.user_id, b.quantity, b.status_order])
-
-      const book = result.rows[0]
-
-      conn.release()
-
-      return book
-    } catch (err) {
-      throw new Error(`Could not add new product. Error: ${err}`)
-    }
-  }
-
-  async delete(id: string): Promise<Order> {
-    try {
-      const sql = 'DELETE FROM orders WHERE id=($1)'
-      // @ts-ignore
-      const conn = await Client.connect()
-
-      const result = await conn.query(sql, [id])
-
-      const book = result.rows[0]
-
-      conn.release()
-
-      return book
-    } catch (err) {
-      throw new Error(`Could not orders book ${id}. Error: ${err}`)
-    }
-  }
-
   async addProduct(id_product: number[], user_id: number, quantity: number[], status_order: boolean): Promise<Order> {
     try {
       const sql = 'INSERT INTO orders (id_product, user_id, quantity, status_order) VALUES($1, $2, $3 ,$4) RETURNING *'
-      //@ts-ignore
       const conn = await Client.connect()
 
       console.log("-> Base de datos conectada");
@@ -114,7 +72,7 @@ export class OrdersStore {
       console.log(err);
 
       throw new Error(`Could not add product ${id_product} to order ${user_id}: ${err}`)
-      
+
     }
   }
 }

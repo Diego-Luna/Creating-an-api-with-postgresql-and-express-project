@@ -1,6 +1,7 @@
 
 import express, { Request, Response } from 'express'
 import { Order, OrdersStore } from '../models/orders'
+import checkProducts from '../middleware/checkProducts'
 
 const store = new OrdersStore()
 
@@ -8,7 +9,7 @@ const orderRoutes = (app: express.Application) => {
   app.get('/orders', index)
   app.get('/orders/:id', show)
   app.post('/orders/:id', show)
-  app.post('/orders/', addProduct)
+  app.post('/orders/', checkProducts, addProduct)
 }
 
 const index = async (_req: Request, res: Response) => {
@@ -16,8 +17,8 @@ const index = async (_req: Request, res: Response) => {
     const products = await store.index()
     res.json(products)
   } catch (error) {
-    res.status(400)
-    res.send(`Error -> ${error}`)
+
+    res.status(400).send(`Error -> ${error}`)
   }
 }
 
@@ -26,12 +27,11 @@ const show = async (req: Request, res: Response) => {
     const product = await store.show(req.params.id)
     res.json(product)
   } catch (error) {
-    res.status(400)
-    res.send(`Error -> ${error}`)
+
+    res.status(400).send(`Error -> ${error}`)
   }
 }
 
-// ... other methods
 const addProduct = async (_req: Request, res: Response) => {
 
   const order: Order = {
@@ -43,17 +43,13 @@ const addProduct = async (_req: Request, res: Response) => {
 
   try {
 
-    console.log("> order");
-    console.log(order);
-
-
     const addedProduct = await store.addProduct(order.id_product, order.user_id, order.quantity, order.status_order)
     res.json(addedProduct)
   } catch (error) {
     console.log("**error en rutas **");
 
-    res.status(400)
-    res.send(`Error -> ${error}`)
+
+    res.status(400).send(`Error -> ${error}`)
   }
 }
 
