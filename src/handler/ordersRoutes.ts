@@ -7,6 +7,7 @@ const store = new OrdersStore()
 const orderRoutes = (app: express.Application) => {
   app.get('/orders', index)
   app.get('/orders/:id', show)
+  app.post('/orders/:id', show)
   // app.post('/orders', create)
   // add product
   app.post('/orders/', addProduct)
