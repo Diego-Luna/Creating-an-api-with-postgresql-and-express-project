@@ -18,12 +18,11 @@ if (typeof TOKEN_SECRET == 'undefined') {
 
 
 const userRoutes = (app: express.Application) => {
-    app.get('/users', index)
-    app.get('/users/:id', show)
+    app.get('/users', verifyAuthToken, index)
+    app.get('/users/:id', verifyAuthToken, show)
     app.post('/users', create)
     app.post('/users/authenticate', authenticate)
     app.post('/users/:id', verifyAuthToken, update)
-    app.delete('/users/:id', verifyAuthToken, destroy)
 }
 
 const store = new UserStore()
@@ -85,11 +84,6 @@ const update = async (req: Request, res: Response) => {
         res.status(400)
         res.json(err)
     }
-}
-
-const destroy = async (_req: Request, res: Response) => {
-    const deleted = await store.delete(_req.params.id)
-    res.json(deleted)
 }
 
 const authenticate = async (req: Request, res: Response) => {
