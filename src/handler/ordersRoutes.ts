@@ -41,10 +41,10 @@ const addProduct = async (_req: Request, res: Response) => {
     const addedProduct = await store.addProduct(order.id_product, order.user_id, order.quantity, order.status_order)
     res.json(addedProduct)
   } catch (err) {
-    console.log("** error en rutas **");
-
+    console.log("**error en rutas **");
+    
     res.status(400)
-    res.json(`Error in addProduct`)
+    res.json(err)
   }
 }
 
