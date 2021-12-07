@@ -30,3 +30,6 @@ app.get('*', (req: Request, res: Response): void => {
 app.listen(port, function () {
     console.log(`starting app on: http://localhost/${port}`)
 })
+
+// Tests
+export default app;
