@@ -4,9 +4,7 @@ import Client from '../database'
 
 export type Order = {
   id?: number;
-  id_product: number[];
   user_id: string;
-  quantity: number[];
   status_order: boolean;
 }
 
@@ -40,6 +38,28 @@ export class OrdersStore {
       return result.rows[0]
     } catch (err) {
       throw new Error(`Could not find orders ${id}. Error: ${err}`)
+    }
+  }
+
+  async create(b: Order): Promise<Order> {
+    try {
+      const sql = 'INSERT INTO orders (user_id, status_order) VALUES($1, $2) RETURNING *'
+      // @ts-ignore
+      const conn = await Client.connect()
+
+      // user_id: string;
+      // status_order: boolean;
+
+      const result = await conn
+        .query(sql, [b.user_id, b.status_order])
+
+      const book = result.rows[0]
+
+      conn.release()
+
+      return book
+    } catch (err) {
+      throw new Error(`Could not add new product. Error: ${err}`)
     }
   }
 
