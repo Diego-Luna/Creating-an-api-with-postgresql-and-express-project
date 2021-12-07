@@ -93,16 +93,102 @@ CREATE TABLE orders (
 
 - The route to see all your products:
 
-`` GET http: // localhost: 8080 / products`
+`` GET http:/localhost:8080/products`
 
 - The path to view a particular product:
 
-``GET http: // localhost: 8080 / products /: id`
+``GET http:/localhost:8080/products/:id`
 
 - The path to create a product, but it has a middleware that verifies the JWT:
 
-``POST http: // localhost: 8080 / products /: id`
+``POST http:/localhost:8080/products/:id`
+
+How to send body Json information:
+
+```json
+{
+  "name": "test 3",
+  "price": 100
+}
+```
 
 - The path to delete a product, but it has a middleware that checks the JWT:
 
-``DELETE http: // localhost: 8080 / products /: id`
+``DELETE http:/localhost:8080/products/:id`
+
+### Users:
+
+All routes have a middleware that verifies the JWT:
+
+- The path to see all users:
+
+```
+GET http:/localhost:8080/users
+```
+
+- The path to view a particular user:
+
+```
+GET http:/localhost:8080/users/:id
+```
+
+- The path to create a user,
+
+```
+POST http:/localhost:8080/users/:id
+```
+
+How to send body Json information:
+
+```json
+{
+  "firstName": "name-2",
+  "lastName": "last-2",
+  "password": "password123"
+}
+```
+
+- The path to authenticate
+
+```
+POST http:/localhost:8080/users/authenticate
+```
+
+- The path to modify a user,
+
+```
+POST http:/localhost:8080/users/:id
+```
+
+### Orders:
+
+All routes have a middleware that verifies the JWT:
+
+- The path to see all orders:
+
+```
+GET http:/localhost:8080/users
+```
+
+- The path to view a particular order:
+
+```
+GET http:/localhost:8080/users/:id
+```
+
+- The path to create an order,
+
+```
+POST http:/localhost:8080/users/:id
+```
+
+How to send body Json information:
+
+```json
+{
+  "id_product": [1],
+  "user_id": 1,
+  "quantity": [1],
+  "status_order": false
+}
+```
