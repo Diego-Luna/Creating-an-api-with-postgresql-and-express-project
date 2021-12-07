@@ -2,56 +2,107 @@
 
 ## Getting Started
 
-This repo contains a basic Node and Express app to get you started in constructing an API. To get started, clone this repo and run `yarn` in your terminal at the project root.
+1. Install dependencies:
 
-## Required Technologies
+```
+npm install
+```
 
-Your application must make use of the following libraries:
+2. Create user Postgres user:
 
-- Postgres for the database
-- Node/Express for the application logic
-- dotenv from npm for managing environment variables
-- db-migrate from npm for migrations
-- jsonwebtoken from npm for working with JWTs
-- jasmine from npm for testing
+```
+su postgres
+```
 
-## Steps to Completion
+```
+psql postgres
+```
 
-### 1. Plan to Meet Requirements
+```
+CREATE USER full_stack_user WITH PASSWORD 'password123';
+```
 
-In this repo there is a `REQUIREMENTS.md` document which outlines what this API needs to supply for the frontend, as well as the agreed upon data shapes to be passed between front and backend. This is much like a document you might come across in real life when building or extending an API.
+3. We create the database:
 
-Your first task is to read the requirements and update the document with the following:
+```
+CREATE DATABASE products_ecommerce;
+```
 
-- Determine the RESTful route for each endpoint listed. Add the RESTful route and HTTP verb to the document so that the frontend developer can begin to build their fetch requests.  
-  **Example**: A SHOW route: 'blogs/:id' [GET]
+4. You have to fill the file: `.env`, there is an example in the` .env.example`:
 
-- Design the Postgres database tables based off the data shape requirements. Add to the requirements document the database tables and columns being sure to mark foreign keys.  
-  **Example**: You can format this however you like but these types of information should be provided
-  Table: Books (id:varchar, title:varchar, author:varchar, published_year:varchar, publisher_id:string[foreign key to publishers table], pages:number)
+```
+POSTGRES_HOST=127.0.0.1
+POSTGRES_DB=products_ecommerce
+POSTGRES_USER=full_stack_user
+POSTGRES_PASSWORD=password123
+BCRYPT_PASSWORD=
+SALT_ROUNDS=
+TOKEN_SECRET=
+```
 
-**NOTE** It is important to remember that there might not be a one to one ratio between data shapes and database tables. Data shapes only outline the structure of objects being passed between frontend and API, the database may need multiple tables to store a single shape.
+5. The command to activate the project
 
-### 2. DB Creation and Migrations
+```
+npm run start
+```
 
-Now that you have the structure of the databse outlined, it is time to create the database and migrations. Add the npm packages dotenv and db-migrate that we used in the course and setup your Postgres database. If you get stuck, you can always revisit the database lesson for a reminder.
+5. The command for testing
 
-You must also ensure that any sensitive information is hashed with bcrypt. If any passwords are found in plain text in your application it will not pass.
+```
+npm run test
+```
 
-### 3. Models
+## Database logic:
 
-Create the models for each database table. The methods in each model should map to the endpoints in `REQUIREMENTS.md`. Remember that these models should all have test suites and mocks.
+I made a table for the products, where null values are not accepted:
 
-### 4. Express Handlers
+```sql
+CREATE TABLE products (
+     id SERIAL PRIMARY KEY,
+     name VARCHAR NOT NULL,
+     price integer NOT NULL
+);
+```
 
-Set up the Express handlers to route incoming requests to the correct model method. Make sure that the endpoints you create match up with the enpoints listed in `REQUIREMENTS.md`. Endpoints must have tests and be CORS enabled.
+I made a table for users, where null values are not accepted:
 
-### 5. JWTs
+```sql
+CREATE TABLE users (
+     id SERIAL PRIMARY KEY,
+     firstName VARCHAR NOT NULL,
+     lastName VARCHAR NOT NULL,
+     password VARCHAR NOT NULL
+);
+```
 
-Add JWT functionality as shown in the course. Make sure that JWTs are required for the routes listed in `REQUIUREMENTS.md`.
+I made a table for orders, where null values are not accepted and we refer to the user. In the case of products, there is a Middleware that is in charge of checking that the product exists.
 
-### 6. QA and `README.md`
+```sql
+CREATE TABLE orders (
+     id SERIAL PRIMARY KEY,
+     id_product integer [] NOT NULL,
+     user_id bigint REFERENCES users (id) NOT NULL,
+     quantity integer [] NOT NULL,
+     status_order boolean NOT NULL
+);
+```
 
-Before submitting, make sure that your project is complete with a `README.md`. Your `README.md` must include instructions for setting up and running your project including how you setup, run, and connect to your database.
+## Routes:
 
-Before submitting your project, spin it up and test each endpoint. If each one responds with data that matches the data shapes from the `REQUIREMENTS.md`, it is ready for submission!
+### Products:
+
+- The route to see all your products:
+
+`` GET http: // localhost: 8080 / products`
+
+- The path to view a particular product:
+
+``GET http: // localhost: 8080 / products /: id`
+
+- The path to create a product, but it has a middleware that verifies the JWT:
+
+``POST http: // localhost: 8080 / products /: id`
+
+- The path to delete a product, but it has a middleware that checks the JWT:
+
+``DELETE http: // localhost: 8080 / products /: id`
