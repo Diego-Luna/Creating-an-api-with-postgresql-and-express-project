@@ -26,4 +26,14 @@ describe("User Model", () => {
     expect(store.authenticate).toBeDefined();
   });
 
+  it('create method should add a book', async () => {
+    const result = await store.create({
+      firstname: "name-2",
+      lastname: "last-2",
+      password: "password123"
+    });
+
+    expect(result).toBeDefined();
+  });
+
 });

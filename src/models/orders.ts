@@ -5,7 +5,7 @@ import Client from '../database'
 export type Order = {
   id?: number;
   id_product: number[];
-  user_id: number;
+  user_id: string;
   quantity: number[];
   status_order: boolean;
 }
@@ -43,7 +43,7 @@ export class OrdersStore {
     }
   }
 
-  async addProduct(id_product: number[], user_id: number, quantity: number[], status_order: boolean): Promise<Order> {
+  async addProduct(id_product: number[], user_id: string, quantity: number[], status_order: boolean): Promise<Order> {
     try {
       const sql = 'INSERT INTO orders (id_product, user_id, quantity, status_order) VALUES($1, $2, $3 ,$4) RETURNING *'
       const conn = await Client.connect()
@@ -57,10 +57,6 @@ export class OrdersStore {
 
       const result = await conn
         .query(sql, [id_product, user_id, quantity, status_order])
-
-      console.log("-> result");
-      console.log(result.rows);
-
 
       const order = result.rows[0]
 
