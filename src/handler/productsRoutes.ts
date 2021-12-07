@@ -7,8 +7,7 @@ const store = new ProductsStore()
 const productRoutes = (app: express.Application) => {
   app.get('/products', index)
   app.get('/products/:id', show)
-  // app.post('/products/', verifyAuthToken, create)
-  app.post('/products/', create)
+  app.post('/products/', verifyAuthToken, create)
   app.delete('/products/:id', verifyAuthToken, destroy)
 }
 

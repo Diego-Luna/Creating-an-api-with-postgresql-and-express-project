@@ -11,8 +11,8 @@
     "test-jasmine": "jasmine-ts",
     "tsc": "tsc",
     "test-db": "ENV=test db-migrate --env test up && jasmine-ts && db-migrate db:drop test",
-    "test": " npm run test && npm run build && npm run jasmine",
-    "test-code": "npm run build && npm run jasmine"
+    "test": " npm run test-db && db-migrate up && npm run build && npm run jasmine",
+    "test-code": "db-migrate up && npm run build && npm run jasmine"
   },
   "author": "Diego Fco Luna",
   "dependencies": {

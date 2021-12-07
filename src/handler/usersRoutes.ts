@@ -20,8 +20,7 @@ if (typeof TOKEN_SECRET == 'undefined') {
 const userRoutes = (app: express.Application) => {
     app.get('/users', verifyAuthToken, index)
     app.get('/users/:id', verifyAuthToken, show)
-    // app.post('/users', verifyAuthToken, create)
-    app.post('/users', create)
+    app.post('/users', verifyAuthToken, create)
     app.post('/users/authenticate', authenticate)
     app.post('/users/:id', verifyAuthToken, update)
 }
@@ -51,8 +50,8 @@ const show = async (_req: Request, res: Response) => {
 
 const create = async (req: Request, res: Response) => {
     const user: User = {
-        firstName: req.body.firstName,
-        lastName: req.body.lastName,
+        firstname: req.body.firstName,
+        lastname: req.body.lastName,
         password: req.body.password
     }
 
@@ -71,8 +70,8 @@ const create = async (req: Request, res: Response) => {
 const update = async (req: Request, res: Response) => {
     const user: User = {
         id: parseInt(req.params.id),
-        firstName: req.body.firstName,
-        lastName: req.body.lastName,
+        firstname: req.body.firstName,
+        lastname: req.body.lastName,
         password: req.body.password
     }
     try {
@@ -98,12 +97,12 @@ const update = async (req: Request, res: Response) => {
 
 const authenticate = async (req: Request, res: Response) => {
     const user: User = {
-        firstName: req.body.firstName,
-        lastName: req.body.lastName,
+        firstname: req.body.firstName,
+        lastname: req.body.lastName,
         password: req.body.password
     }
     try {
-        const u = await store.authenticate(user.firstName, user.password)
+        const u = await store.authenticate(user.firstname, user.password)
         var token = jwt.sign({ user: u }, token_secret);
         res.json(token)
     } catch (error) {

@@ -20,8 +20,8 @@ if (typeof BCRYPT_PASSWORD == 'undefined' || typeof SALT_ROUNDS == 'undefined') 
 
 export type User = {
   id?: Number;
-  firstName: string;
-  lastName: string;
+  firstname: string;
+  lastname: string;
   password: string;
 }
 
@@ -70,7 +70,7 @@ export class UserStore {
         parseInt(saltRounds)
       );
 
-      const result = await conn.query(sql, [u.firstName, u.lastName, hash])
+      const result = await conn.query(sql, [u.firstname, u.lastname, hash])
 
       const user = result.rows[0]
 
@@ -78,7 +78,7 @@ export class UserStore {
 
       return user
     } catch (err) {
-      throw new Error(`unable create user (firstName :${u.firstName} lastName: ${u.lastName}): ${err}`)
+      throw new Error(`unable create user (firstname :${u.firstname} lastName: ${u.lastname}): ${err}`)
     }
   }
 
@@ -105,7 +105,7 @@ export class UserStore {
 
     const conn = await Client.connect()
 
-    const sql = 'SELECT password FROM users WHERE firstName=($1)'
+    const sql = 'SELECT password FROM users WHERE firstname=($1)'
 
     const result = await conn.query(sql, [username])
 
