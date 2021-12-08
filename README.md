@@ -28,13 +28,23 @@ CREATE USER full_stack_user WITH PASSWORD 'password123';
 CREATE DATABASE products_ecommerce;
 ```
 
+```
+CREATE DATABASE products_ecommerce_test;
+```
+
 4. You have to fill the file: `.env`, there is an example in the` .env.example`:
 
 ```
+ENV=test
+
 POSTGRES_HOST=127.0.0.1
+
 POSTGRES_DB=products_ecommerce
+POSTGRES_DB_TEST=products_ecommerce_test
+
 POSTGRES_USER=full_stack_user
 POSTGRES_PASSWORD=password123
+
 BCRYPT_PASSWORD=
 SALT_ROUNDS=
 TOKEN_SECRET=
@@ -186,8 +196,8 @@ How to send body Json information:
 
 ```json
 {
-    "user_id": 1,
-    "status_order": false
+  "user_id": 1,
+  "status_order": false
 }
 ```
 
@@ -217,7 +227,7 @@ POST http:/localhost:8080/orders/products/1
 
 ```json
 {
-    "productId": 1,
-    "quantity" : 10
+  "productId": 1,
+  "quantity": 10
 }
 ```
