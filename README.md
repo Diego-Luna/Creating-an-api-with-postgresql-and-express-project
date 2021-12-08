@@ -167,19 +167,19 @@ All routes have a middleware that verifies the JWT:
 - The path to see all orders:
 
 ```
-GET http:/localhost:8080/users
+GET http:/localhost:8080/orders
 ```
 
 - The path to view a particular order:
 
 ```
-GET http:/localhost:8080/users/:id
+GET http:/localhost:8080/orders/:id
 ```
 
 - The path to create an order,
 
 ```
-POST http:/localhost:8080/users/:id
+POST http:/localhost:8080/orders/:id
 ```
 
 How to send body Json information:

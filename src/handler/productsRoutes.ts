@@ -8,6 +8,7 @@ const productRoutes = (app: express.Application) => {
   app.get('/products', index)
   app.get('/products/:id', show)
   app.post('/products/', verifyAuthToken, create)
+  // app.post('/products/', create)
   app.delete('/products/:id', verifyAuthToken, destroy)
 }
 
@@ -42,7 +43,6 @@ const create = async (req: Request, res: Response) => {
 
 
     const newProduct = await store.create(product)
-    console.log('--> Funciono en create routes ');
     res.json(newProduct)
   } catch (error) {
 

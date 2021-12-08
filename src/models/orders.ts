@@ -4,7 +4,7 @@ import Client from '../database'
 
 export type Order = {
   id?: number;
-  user_id: string;
+  user_id: number;
   status_order: boolean;
 }
 
@@ -27,7 +27,7 @@ export class OrdersStore {
 
   async show(id: string): Promise<Order> {
     try {
-      const sql = 'SELECT * FROM orders WHERE user_id=($1)'
+      const sql = 'SELECT * FROM orders WHERE id=($1)'
       // @ts-ignore
       const conn = await Client.connect()
 
@@ -63,20 +63,15 @@ export class OrdersStore {
     }
   }
 
-  async addProduct(id_product: number[], user_id: string, quantity: number[], status_order: boolean): Promise<Order> {
+  // async addProduct(id_product: number[], user_id: string, quantity: number[], status_order: boolean): Promise<Order> {
+  async addProduct(quantity: number, orderId: string, productId: string): Promise<Order> {
     try {
-      const sql = 'INSERT INTO orders (id_product, user_id, quantity, status_order) VALUES($1, $2, $3 ,$4) RETURNING *'
+      const sql = 'INSERT INTO orderproducts (quantity, order_id, product_id) VALUES($1, $2, $3) RETURNING *'
+      //@ts-ignore
       const conn = await Client.connect()
 
-      console.log("-> Base de datos conectada");
-
-      // id_product: number[];
-      // user_id: number[];
-      // quantity: number[];
-      // status_order: boolean;
-
       const result = await conn
-        .query(sql, [id_product, user_id, quantity, status_order])
+        .query(sql, [quantity, orderId, productId])
 
       const order = result.rows[0]
 
@@ -84,11 +79,43 @@ export class OrdersStore {
 
       return order
     } catch (err) {
-      console.log("--> Error :");
-      console.log(err);
-
-      throw new Error(`Could not add product ${id_product} to order ${user_id}: ${err}`)
-
+      throw new Error(`Could not add product ${productId} to order ${orderId}: ${err}`)
     }
   }
+
+  async indexsProducts(): Promise<Order[]> {
+    try {
+
+      console.log("orders model");
+
+      // @ts-ignore
+      const conn = await Client.connect()
+      const sql = 'SELECT * FROM orderproducts'
+
+      const result = await conn.query(sql)
+
+      conn.release()
+
+      return result.rows
+    } catch (err) {
+      throw new Error(`Could not get orderproducts. Error: ${err}`)
+    }
+  }
+
+  async showProduct(id: string): Promise<Order> {
+    try {
+      const sql = 'SELECT * FROM orderproducts WHERE order_id=($1)'
+      // @ts-ignore
+      const conn = await Client.connect()
+
+      const result = await conn.query(sql, [id])
+
+      conn.release()
+
+      return result.rows[0]
+    } catch (err) {
+      throw new Error(`Could not find orderproducts ${id}. Error: ${err}`)
+    }
+  }
+
 }
