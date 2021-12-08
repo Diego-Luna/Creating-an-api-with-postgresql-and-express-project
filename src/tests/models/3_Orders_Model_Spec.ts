@@ -45,7 +45,6 @@ describe("Orders Model", () => {
   it('create method should add a Orders -> /orders/products/', async () => {
     const result = await store.addProduct(1, '1', '1');
 
-
     expect(result).toEqual({ id: 1, quantity: 1, order_id: '1', product_id: '1' });
   });
 
