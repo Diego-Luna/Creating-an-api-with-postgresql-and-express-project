@@ -4,9 +4,14 @@ import Client from '../database'
 
 export type Order = {
   id?: number;
-  user_id: number;
+  user_id: string;
   status_order: boolean;
 }
+export type OrderProduct = {
+  id?: number, quantity: number, order_id: string, product_id: string
+}
+
+
 
 export class OrdersStore {
   async index(): Promise<Order[]> {
@@ -64,7 +69,7 @@ export class OrdersStore {
   }
 
   // async addProduct(id_product: number[], user_id: string, quantity: number[], status_order: boolean): Promise<Order> {
-  async addProduct(quantity: number, orderId: string, productId: string): Promise<Order> {
+  async addProduct(quantity: number, orderId: string, productId: string): Promise<OrderProduct> {
     try {
       const sql = 'INSERT INTO orderproducts (quantity, order_id, product_id) VALUES($1, $2, $3) RETURNING *'
       //@ts-ignore
@@ -83,7 +88,7 @@ export class OrdersStore {
     }
   }
 
-  async indexsProducts(): Promise<Order[]> {
+  async indexsProducts(): Promise<OrderProduct[]> {
     try {
 
       console.log("orders model");
@@ -102,7 +107,7 @@ export class OrdersStore {
     }
   }
 
-  async showProduct(id: string): Promise<Order> {
+  async showProduct(id: string): Promise<OrderProduct> {
     try {
       const sql = 'SELECT * FROM orderproducts WHERE order_id=($1)'
       // @ts-ignore

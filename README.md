@@ -186,9 +186,38 @@ How to send body Json information:
 
 ```json
 {
-  "id_product": [1],
-  "user_id": 1,
-  "quantity": [1],
-  "status_order": false
+    "user_id": 1,
+    "status_order": false
+}
+```
+
+- The path to see all ordersProducts:
+
+```
+GET http:/localhost:8080/orders/products
+```
+
+- The path to view a particular ordersProducts:
+
+```
+GET http:/localhost:8080/orders/products/:id
+```
+
+- The path to create an ordersProducts,
+
+```
+POST http:/localhost:8080/orders/products/:id
+```
+
+How to send body Json information:
+
+```
+POST http:/localhost:8080/orders/products/1
+```
+
+```json
+{
+    "productId": 1,
+    "quantity" : 10
 }
 ```

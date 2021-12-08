@@ -25,6 +25,7 @@ describe("Products Model", () => {
       price: 250
     });
 
+
     expect(result).toEqual({ id: 1, name: 'Books 1', price: 250 });
   });
 

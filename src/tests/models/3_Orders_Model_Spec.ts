@@ -15,6 +15,25 @@ describe("Orders Model", () => {
     expect(store.addProduct).toBeDefined();
   });
 
+  it('create method should add a Orders -> /orders/', async () => {
+    const result = await store.create({ user_id: '1', status_order: false });
+
+
+    expect(result).toEqual({ id: 1, user_id: '1', status_order: false });
+  });
+
+  it('index method should return a list of Orders', async () => {
+    const result = await store.index();
+
+    expect(result).toEqual([{ id: 1, user_id: '1', status_order: false }]);
+  });
+
+  it('show method should return the correct Orders', async () => {
+    const result = await store.show("1");
+
+    expect(result).toEqual({ id: 1, user_id: '1', status_order: false });
+  });
+
   it('should have an index method -> /orders/products/', () => {
     expect(store.indexsProducts).toBeDefined();
   });
@@ -23,47 +42,25 @@ describe("Orders Model", () => {
     expect(store.showProduct).toBeDefined();
   });
 
-  it('create method should add a Orders -> /orders/', async () => {
-    const result = await store.create({ user_id: 1, status_order: false });
-
-    console.log("-> result 1 orders");
-    console.log(result);
+  it('create method should add a Orders -> /orders/products/', async () => {
+    const result = await store.addProduct(1, '1', '1');
 
 
-
-    expect(result).toEqual({
-      id: 1,
-      user_id: 1,
-      status_order: false
-    });
+    expect(result).toEqual({ id: 1, quantity: 1, order_id: '1', product_id: '1' });
   });
 
-  it('index method should return a list of Orders', async () => {
-    const result = await store.index();
+  it('index method should return a list of Orders -> /orders/products/', async () => {
+    const result = await store.indexsProducts();
 
-    console.log("-> result 2 orders");
-    console.log(result);
-
-    expect(result).toEqual([
-      {
-        id: 1,
-        user_id: 1,
-        status_order: false
-      }
-    ]);
+    expect(result).toEqual([{ id: 1, quantity: 1, order_id: '1', product_id: '1' }]);
   });
 
-  it('show method should return the correct Orders', async () => {
-    const result = await store.show("1");
+  it('show method should return the correct Orders -> /orders/products/', async () => {
+    const result = await store.showProduct("1");
 
-    console.log("-> result 3 orders");
-    console.log(result);
-
-    expect(result).toEqual({
-      id: 1,
-      user_id: 1,
-      status_order: false
-    });
+    expect(result).toEqual({ id: 1, quantity: 1, order_id: '1', product_id: '1' });
   });
+
+
 
 });
